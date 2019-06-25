@@ -42,5 +42,6 @@ defmodule BudgetApiWeb.Endpoint do
     key: "_budget_api_key",
     signing_salt: "5/jbcm8L"
 
+#  plug CORSPlug
   plug BudgetApiWeb.Router
 end

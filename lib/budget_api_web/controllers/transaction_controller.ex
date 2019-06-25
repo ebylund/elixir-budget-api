@@ -8,7 +8,7 @@ defmodule BudgetApiWeb.TransactionController do
 
   def index(conn, _params) do
     transactions = BudgetPi.list_transactions()
-    :timer.sleep(1500)
+#    :timer.sleep(1500)
     render(conn, "index.json", transactions: transactions)
   end
 
