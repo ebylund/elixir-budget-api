@@ -42,22 +42,23 @@ defmodule BudgetApiWeb.TransactionController do
     end
   end
 
-  defp csv_content do
-    [['a', 'list'],['of', 'lists']]
-                  |> CSV.encode
-                  |> Enum.to_list
-                  |> to_string
+  defp csv_data do
+    data = BudgetPi.list_transactions()
+    |> Enum.map(fn(tran) -> "#{tran.date}, #{tran.description}, #{tran.category}, #{tran.amount}\n" end)
+    |> Enum.to_list
+    |> to_string
+
+    "date, description, category, amount \n" <> data
   end
 
-  def export(conn, _params) do
+  def csv_export(conn, _params) do
     conn
     |> put_resp_content_type("text/csv")
     |> put_resp_header("content-disposition", "attachment; filename=\"transactions.csv\"")
-    |> send_resp(200, csv_content())
+    |> send_resp(200, csv_data())
   end
 
   def import(conn, %{"transactions-file" => trans_props}) do
-#    put_resp_header(conn, "Access-Control-Allow-Origin", "*")
     trans_props.path
     |> File.stream!
     |> CSV.decode!(headers: true)
@@ -65,5 +66,4 @@ defmodule BudgetApiWeb.TransactionController do
 
     send_resp(conn, :no_content, "")
   end
-
 end

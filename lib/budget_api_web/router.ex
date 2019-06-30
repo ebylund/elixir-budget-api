@@ -13,8 +13,8 @@ defmodule BudgetApiWeb.Router do
     options "/transactions", TransactionController, :options
     options "/transactions/:id", TransactionController, :options
 
+    get "/transactions.csv", TransactionController, :csv_export
     scope "/transactions", as: :upload do
-      get "/upload", TransactionController, :export
       post "/upload", TransactionController, :import
     end
   end
